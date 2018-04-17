@@ -15,6 +15,7 @@ import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 
 import javax.sql.DataSource;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,20 +47,20 @@ public class JdbcUserRepositoryImpl implements UserRepository {
     @Transactional
     public User save(User user) {
         BeanPropertySqlParameterSource parameterSource = new BeanPropertySqlParameterSource(user);
-        List<Object[]> roleArgs = new ArrayList<>();
-        for(Role role: user.getRoles()) {
-            roleArgs.add(new Object[]{user.getId(), role});
-        }
-        String roleSql = "UPDATE user_roles SET user_id:=1, role:=2";
         if (user.isNew()) {
             Number newKey = insertUser.executeAndReturnKey(parameterSource);
             user.setId(newKey.intValue());
+            String roleSql = "INSERT  INTO user_roles (user_id, role) values (?, ?)";
+            List<Object[]> roleArgs = new ArrayList<>();
+            for(Role role: user.getRoles()) {
+                roleArgs.add(new Object[]{user.getId(), role});
+            }
+            jdbcTemplate.batchUpdate(roleSql, roleArgs, new int[]{Types.INTEGER, Types.VARCHAR});
         } else if (namedParameterJdbcTemplate.update(
-                "UPDATE users SET name=:name, email=:email, password=:password" +
+                "UPDATE users SET name=:name, email=:email, password=:password, " +
                         "registered=:registered, enabled=:enabled, calories_per_day=:caloriesPerDay WHERE id=:id", parameterSource) == 0) {
             return null;
         }
-        jdbcTemplate.batchUpdate(roleSql, roleArgs);
         return user;
     }
 
