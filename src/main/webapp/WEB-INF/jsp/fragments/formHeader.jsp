@@ -2,6 +2,6 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <head>
-    <title>Meal</title>
+    <title><spring:message code="meal.title"/></title>
     <link rel="stylesheet" href="css/style.css">
 </head>

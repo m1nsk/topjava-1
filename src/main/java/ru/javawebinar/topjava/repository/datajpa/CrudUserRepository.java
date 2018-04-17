@@ -35,6 +35,6 @@ public interface CrudUserRepository extends JpaRepository<User, Integer> {
 //    @EntityGraph(value = User.GRAPH_WITH_MEALS)
 
     @EntityGraph(attributePaths={"meals", "roles"})
-    @Query("SELECT u FROM User u WHERE u.id=?1")
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.roles WHERE u.id=?1")
     User getWithMeals(int id);
 }

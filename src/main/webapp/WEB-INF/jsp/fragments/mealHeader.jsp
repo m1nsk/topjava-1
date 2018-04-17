@@ -2,6 +2,6 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <head>
-    <title>Calories management</title>
+    <title><spring:message code="meal.caloriesManagment"/></title>
     <link rel="stylesheet" href="css/style.css">
 </head>
