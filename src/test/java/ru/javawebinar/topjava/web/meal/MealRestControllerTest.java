@@ -36,7 +36,7 @@ public class MealRestControllerTest extends AbstractControllerTest {
     public void testDelete() throws Exception {
         TestUtil.print(
                 mockMvc.perform(delete(REST_URL + "/" + MEAL1_ID))
-                        .andExpect(status().isOk()));
+                        .andExpect(status().isNoContent()));
         List<Meal> actualMeals = mealService.getAll(AuthorizedUser.id());
         List<Meal> expectedMeals = new ArrayList<>(MEALS);
         expectedMeals.remove(MEAL1);
