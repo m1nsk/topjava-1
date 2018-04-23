@@ -40,7 +40,8 @@ public class ProfileRestControllerTest extends AbstractControllerTest {
         mockMvc.perform(put(REST_URL).contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated)))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
 
         assertMatch(new User(userService.getByEmail("newemail@ya.ru")), updated);
     }
